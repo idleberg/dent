@@ -6,34 +6,42 @@
 [![Version](https://img.shields.io/npm/v/@nsis/dent-cli?style=for-the-badge)](https://www.npmjs.org/package/@nsis/dent-cli)
 [![Build](https://img.shields.io/github/actions/workflow/status/idleberg/node-dent-cli/default.yml?style=for-the-badge)](https://github.com/idleberg/node-dent-cli/actions)
 
-## Prerequisites
+## Installation
 
-This is a TypeScript application that depends on a [NodeJS](https://nodejs.org) runtime installed on your computer.
+### Node.js
 
-## Usage
+For single-use, use `npx` to download and run the CLI:
 
-### Installation
+```sh
+$ npx -y @nsis/dent-cli --help
+```
 
-> [!TIP]
->
-> If you don't use a JavaScript runtime such as Node.js, download a binary of the [latest version](https://github.com/idleberg/node-dent-cli/releases/latest) for Windows.
-
-You could install the `dent` CLI globally
+Or, if you prefer to install the CLI:
 
 ```sh
 $ npm install --global @nsis/dent-cli
 $ npx dent --help
 ```
 
-### Single use
+### Scoop
 
-Download and execute the latest version using [`npx`](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b).
+The CLI is available to users of the [Scoop](https://scoop.sh/) package manager.
 
-```sh
-$ npx @nsis/dent-cli --help
+```powershell
+# Add the bucket
+scoop bucket add nsis https://github.com/NSIS-Dev/scoop-nsis
+
+# Install dent
+scoop install nsis/dent
 ```
 
-### Options
+### Download
+
+As a last resort, you can download [pre-compiled binaries](https://github.com/idleberg/node-dent-cli/releases/latest) for Windows.
+
+## Usage
+
+As an opinionated formatter, there are but a few options you can tweak. Run `dent --help` for a list of all options.
 
 ```
 Usage: dent [options] <file...>
