@@ -18,7 +18,7 @@ export async function handleCLI() {
 			writeErr: (message: string) => logger.error(message),
 		})
 		.description('CLI tool to format NSIS scripts')
-		.arguments('<file...>')
+		.arguments('[file...]')
 		.option('-D, --debug', 'prints additional debug messages', false)
 		.optionsGroup('Formatting Options')
 		.option(
