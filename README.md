@@ -18,7 +18,7 @@
 ```ts
 import { createFormatter } from '@nsis/dent';
 
-const format = createFormatter(/* user options */);
+const { format } = createFormatter(/* user options */);
 
 format(`
 	# Look ma, no indentation
@@ -38,6 +38,25 @@ Name "Demo"
 Section
 	Nop
 SectionEnd
+```
+
+### `format(fileContents)`
+
+Formats the given NSIS code and returns the result as a string.
+
+### `check(fileContents)`
+
+Returns `true` if the code is already compliant with the format settings (i.e. formatting would not change it), `false` otherwise.
+
+```ts
+import { createFormatter } from '@nsis/dent';
+
+const { format, check } = createFormatter({ useTabs: true });
+
+const formatted = format('Section\nNop\nSectionEnd\n');
+
+check(formatted);  // true
+check('section\nNop\nSectionEnd\n');  // false (casing differs)
 ```
 
 ### Options
