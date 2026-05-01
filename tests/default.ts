@@ -5,7 +5,7 @@ import * as assert from 'uvu/assert';
 import { createFormatter } from '../src/dent.ts';
 
 test('Tab indentation', async () => {
-	const format = createFormatter();
+	const { format } = createFormatter();
 
 	const fixture = await fs.readFile(resolve(process.cwd(), 'tests/fixtures/indentation.nsi'), 'utf8');
 
@@ -15,7 +15,7 @@ test('Tab indentation', async () => {
 });
 
 test('Explicit tab indentation', async () => {
-	const format = createFormatter({
+	const { format } = createFormatter({
 		useTabs: true,
 	});
 
@@ -27,7 +27,7 @@ test('Explicit tab indentation', async () => {
 });
 
 test('Space indentation', async () => {
-	const format = createFormatter({
+	const { format } = createFormatter({
 		useTabs: false,
 	});
 
@@ -39,7 +39,7 @@ test('Space indentation', async () => {
 });
 
 test('Empty lines', async () => {
-	const format = createFormatter();
+	const { format } = createFormatter();
 
 	const fixture = await fs.readFile(resolve(process.cwd(), 'tests/fixtures/empty-lines.nsi'), 'utf8');
 
@@ -49,7 +49,7 @@ test('Empty lines', async () => {
 });
 
 test('Explicit empty lines', async () => {
-	const format = createFormatter({
+	const { format } = createFormatter({
 		trimEmptyLines: true,
 	});
 

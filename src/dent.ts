@@ -12,14 +12,19 @@ export type DentOptions = {
 	useTabs?: boolean;
 };
 
+export type FormatterAPI = {
+	format: (fileContents: string) => string;
+	check: (fileContents: string) => boolean;
+};
+
 /**
  * Formats the given file contents using the Dent formatting style.
  *
  * @param {Options} options - The options for the Dent formatter.
- * @returns {function(string): string} The formatting function.
+ * @returns {FormatterAPI} An object with `format` and `check` methods.
  * @throws {Error} Throws an error if the options are invalid.
  */
-export function createFormatter(options: DentOptions = {}): (fileContents: string) => string {
+export function createFormatter(options: DentOptions = {}): FormatterAPI {
 	const mergedOptions: DentOptions = {
 		indentSize: defaultIndentation,
 		trimEmptyLines: true,
@@ -55,6 +60,17 @@ export function createFormatter(options: DentOptions = {}): (fileContents: strin
 	}
 
 	/**
+	 * Checks whether the given file contents are already compliant with the
+	 * current format settings (i.e. formatting would not change the code).
+	 *
+	 * @param {string} fileContents - The contents of the file to check.
+	 * @returns {boolean} `true` if the file is already formatted, `false` otherwise.
+	 */
+	function check(fileContents: string): boolean {
+		return format(fileContents) === fileContents;
+	}
+
+	/**
 	 * Determines the desired end-of-line characters for the output.
 	 *
 	 * @param {string} input - The input string (used as fallback for detection).
@@ -69,5 +85,5 @@ export function createFormatter(options: DentOptions = {}): (fileContents: strin
 		return detected ?? (platform() === 'win32' ? '\r\n' : '\n');
 	}
 
-	return format;
+	return { format, check };
 }
