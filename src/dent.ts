@@ -12,7 +12,7 @@ export type DentOptions = {
 	useTabs?: boolean;
 };
 
-export type DentMethods = {
+export type DentFunctions = {
 	format: (fileContents: string) => string;
 	check: (fileContents: string) => boolean;
 };
@@ -21,10 +21,10 @@ export type DentMethods = {
  * Formats the given file contents using the Dent formatting style.
  *
  * @param {Options} options - The options for the Dent formatter.
- * @returns {DentMethods} An object with `format` and `check` methods.
+ * @returns An object with `format` and `check` functions.
  * @throws {Error} Throws an error if the options are invalid.
  */
-export function createFormatter(options: DentOptions = {}): DentMethods {
+export function createFormatter(options: DentOptions = {}): DentFunctions {
 	const mergedOptions: DentOptions = {
 		indentSize: defaultIndentation,
 		trimEmptyLines: true,
