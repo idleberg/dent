@@ -48,17 +48,6 @@ Formats the given NSIS code and returns the result as a string.
 
 Returns `true` if the code is already compliant with the format settings (i.e. formatting would not change it), `false` otherwise.
 
-```ts
-import { createFormatter } from '@nsis/dent';
-
-const { format, check } = createFormatter({ useTabs: true });
-
-const formatted = format('Section\nNop\nSectionEnd\n');
-
-check(formatted);  // true
-check('section\nNop\nSectionEnd\n');  // false (casing differs)
-```
-
 ### Options
 
 #### `options.endOfLines`
