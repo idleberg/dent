@@ -12,7 +12,7 @@ export type DentOptions = {
 	useTabs?: boolean;
 };
 
-export type FormatterAPI = {
+export type DentAPI = {
 	format: (fileContents: string) => string;
 	check: (fileContents: string) => boolean;
 };
@@ -21,10 +21,10 @@ export type FormatterAPI = {
  * Formats the given file contents using the Dent formatting style.
  *
  * @param {Options} options - The options for the Dent formatter.
- * @returns {FormatterAPI} An object with `format` and `check` methods.
+ * @returns {DentAPI} An object with `format` and `check` methods.
  * @throws {Error} Throws an error if the options are invalid.
  */
-export function createFormatter(options: DentOptions = {}): FormatterAPI {
+export function createFormatter(options: DentOptions = {}): DentAPI {
 	const mergedOptions: DentOptions = {
 		indentSize: defaultIndentation,
 		trimEmptyLines: true,
