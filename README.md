@@ -40,11 +40,13 @@ Section
 SectionEnd
 ```
 
-### `format(fileContents)`
+### API
+
+#### `format(fileContents)`
 
 Formats the given NSIS code and returns the result as a string.
 
-### `check(fileContents)`
+#### `check(fileContents)`
 
 Returns `null` if the file is already formatted, otherwise the formatted string.
 
