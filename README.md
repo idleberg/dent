@@ -41,10 +41,15 @@ As a last resort, you can download [pre-compiled binaries](https://github.com/id
 
 ## Usage
 
-As an opinionated formatter, there are but a few options you can tweak. Run `dent --help` for a list of all options.
+The CLI exposes two sub-commands:
+
+- `dent format` — formats NSIS scripts
+- `dent check` — checks if a script needs formatting
+
+Run `dent --help` to list sub-commands, or `dent <command> --help` for command-specific options.
 
 ```
-Usage: dent [options] <file...>
+Usage: dent [options] [command]
 
 CLI tool to format NSIS scripts
 
@@ -53,12 +58,9 @@ Options:
   -D, --debug                 prints additional debug messages (default: false)
   -h, --help                  display help for command
 
-Formatting Options
-  -e, --eol <"crlf"|"lf">     control how line-breaks are represented (default: "lf")
-  -i, --indent-size <number>  number of units per indentation level (default: 2)
-  -s, --use-spaces            indent with spaces instead of tabs (default: false)
-  -t, --trim                  trim empty lines (default: true)
-  -w, --write                 edit files in-place (default: false)
+Commands:
+  format [options] [file...]  format NSIS scripts
+  check [options] [file...]   check whether NSIS scripts are formatted (exits non-zero on drift)
 ```
 
 ## Related
@@ -68,4 +70,3 @@ Formatting Options
 ## License
 
 This work is licensed under [The MIT License](LICENSE)
-  
