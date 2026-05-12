@@ -1,6 +1,6 @@
 {
 	"name": "@nsis/dent-cli",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "An opinionated code formatter for NSIS scripts",
 	"license": "MIT",
 	"scripts": {
