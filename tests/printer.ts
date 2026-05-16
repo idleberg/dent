@@ -501,4 +501,73 @@ for (const trimEmptyLines of [true, false]) {
 	});
 }
 
+// --- Switch/Case indentation ---
+
+test('Switch with fall-through cases indents correctly', () => {
+	const { format } = createFormatter();
+	const input = '${Switch} $0\n${Case} 1\nDetailPrint "one"\n${Case} 2\nDetailPrint "two"\n${EndSwitch}\n';
+	assert.is(
+		format(input),
+		'${Switch} $0\n\t${Case} 1\n\t\tDetailPrint "one"\n\n\t${Case} 2\n\t\tDetailPrint "two"\n${EndSwitch}\n',
+	);
+});
+
+test('Switch with Break indents correctly', () => {
+	const { format } = createFormatter();
+	const input =
+		'${Switch} $0\n${Case} 1\nDetailPrint "one"\n${Break}\n${Case} 2\nDetailPrint "two"\n${Break}\n${EndSwitch}\n';
+	assert.is(
+		format(input),
+		'${Switch} $0\n\t${Case} 1\n\t\tDetailPrint "one"\n\t\t${Break}\n\n\t${Case} 2\n\t\tDetailPrint "two"\n\t\t${Break}\n${EndSwitch}\n',
+	);
+});
+
+test('Switch with CaseElse indents correctly', () => {
+	const { format } = createFormatter();
+	const input = '${Switch} $0\n${Case} 1\nDetailPrint "one"\n${CaseElse}\nDetailPrint "else"\n${EndSwitch}\n';
+	assert.is(
+		format(input),
+		'${Switch} $0\n\t${Case} 1\n\t\tDetailPrint "one"\n\n\t${CaseElse}\n\t\tDetailPrint "else"\n${EndSwitch}\n',
+	);
+});
+
+test('Switch with Default indents correctly', () => {
+	const { format } = createFormatter();
+	const input = '${Switch} $0\n${Case} 1\nDetailPrint "one"\n${Default}\nDetailPrint "def"\n${EndSwitch}\n';
+	assert.is(
+		format(input),
+		'${Switch} $0\n\t${Case} 1\n\t\tDetailPrint "one"\n\n\t${Default}\n\t\tDetailPrint "def"\n${EndSwitch}\n',
+	);
+});
+
+test('Nested switch indents correctly', () => {
+	const { format } = createFormatter();
+	const input = '${Switch} $0\n${Case} 1\n${Switch} $1\n${Case} a\nDetailPrint "nested"\n${EndSwitch}\n${EndSwitch}\n';
+	const result = format(input);
+	assert.ok(result.includes('\t${Case} 1'));
+	assert.ok(result.includes('\t\t${Switch} $1'));
+	assert.ok(result.includes('\t\t\t${Case} a'));
+	assert.ok(result.includes('\t\t\t\tDetailPrint "nested"'));
+	assert.ok(result.includes('\t\t${EndSwitch}'));
+	assert.ok(result.endsWith('${EndSwitch}\n'));
+});
+
+test('Select with fall-through cases indents correctly', () => {
+	const { format } = createFormatter();
+	const input = '${Select} $0\n${Case} 1\nDetailPrint "one"\n${Case} 2\nDetailPrint "two"\n${EndSelect}\n';
+	assert.is(
+		format(input),
+		'${Select} $0\n\t${Case} 1\n\t\tDetailPrint "one"\n\n\t${Case} 2\n\t\tDetailPrint "two"\n${EndSelect}\n',
+	);
+});
+
+test('Switch/Case formatting is idempotent', () => {
+	const { format } = createFormatter();
+	const input =
+		'${Switch} $0\n${Case} 1\nDetailPrint "one"\n${Case} 2\nDetailPrint "two"\n${Break}\n${CaseElse}\nDetailPrint "else"\n${EndSwitch}\n';
+	const first = format(input);
+	const second = format(first);
+	assert.is(first, second);
+});
+
 test.run();

@@ -24,13 +24,6 @@ export const rules = {
 		'!ifmacrondef',
 		'!ifndef',
 		'!macro',
-		'${Case}',
-		'${Case2}',
-		'${Case3}',
-		'${Case4}',
-		'${Case5}',
-		'${CaseElse}',
-		'${Default}',
 		'${Do}',
 		'${DoUntil}',
 		'${DoWhile}',
@@ -48,6 +41,14 @@ export const rules = {
 		'Section',
 		'SectionGroup',
 	]),
+
+	/**
+	 * Case-arm keywords — printed one level inside their parent switch/select,
+	 * with their body indented one further level. They do not push/pop the
+	 * indent stack, so consecutive cases naturally align and `${EndSwitch}`
+	 * only needs to pop the switch itself.
+	 */
+	case: lowerSet(['${Case}', '${Case2}', '${Case3}', '${Case4}', '${Case5}', '${CaseElse}', '${Default}']),
 
 	/** Keywords that close a block (dedent to the opener's level). */
 	close: lowerSet([

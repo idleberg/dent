@@ -55,6 +55,12 @@ export function print(nodes: CSTNode[], options: PrinterOptions): string {
 					lines.push(printInstruction(node, level, options));
 					stack.push(level);
 					level++;
+				} else if (rules.case.has(kw)) {
+					// Print one level inside parent, indent body one further
+					const parentLevel = stack.length > 0 ? (stack[stack.length - 1] as number) : 0;
+					const caseLevel = parentLevel + 1;
+					lines.push(printInstruction(node, caseLevel, options));
+					level = caseLevel + 1;
 				} else if (rules.close.has(kw)) {
 					// Pop to the opener's level, then print
 					level = stack.length > 0 ? (stack.pop() as number) : 0;
@@ -64,9 +70,9 @@ export function print(nodes: CSTNode[], options: PrinterOptions): string {
 					const openerLevel = stack.length > 0 ? (stack[stack.length - 1] as number) : 0;
 					lines.push(printInstruction(node, openerLevel, options));
 				} else if (rules.closeAfter.has(kw)) {
-					// Print at current level, then close the arm
+					// Print at current level, then reset to parent's content level
 					lines.push(printInstruction(node, level, options));
-					level = stack.length > 0 ? (stack.pop() as number) : 0;
+					level = (stack.length > 0 ? (stack[stack.length - 1] as number) : 0) + 1;
 				} else {
 					lines.push(printInstruction(node, level, options));
 				}
@@ -341,10 +347,12 @@ function printTrailingComment(comment: Comment): string {
 }
 
 /**
- * Checks whether a node is a block-opening instruction.
+ * Checks whether a node is a block-opening instruction (or a case-arm opener).
  */
 function isBlockOpen(node: CSTNode): boolean {
-	return node.type === 'instruction' && rules.open.has(node.keyword.toLowerCase());
+	if (node.type !== 'instruction') return false;
+	const kw = node.keyword.toLowerCase();
+	return rules.open.has(kw) || rules.case.has(kw);
 }
 
 /**
