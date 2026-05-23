@@ -607,4 +607,54 @@ test('Switch/Case formatting is idempotent', () => {
 	assert.is(first, second);
 });
 
+// --- Print width / line wrapping ---
+
+test('Line under print width is unchanged', () => {
+	const { format } = createFormatter({ printWidth: 80 });
+	const result = format('DetailPrint "hello"\n');
+	assert.is(result, 'DetailPrint "hello"\n');
+});
+
+test('Line exceeding print width is wrapped with continuations', () => {
+	const { format } = createFormatter({ printWidth: 40 });
+	const result = format('MessageBox MB_OK "A long string value" IDYES true IDNO false\n');
+	assert.is(result, 'MessageBox MB_OK "A long string value" \\\nIDYES true IDNO false\n');
+});
+
+test('Wrapped lines preserve indent level', () => {
+	const { format } = createFormatter({ printWidth: 50 });
+	const result = format('Section "Test"\nMessageBox MB_OK "A long string value" IDYES true IDNO false\nSectionEnd\n');
+	assert.is(
+		result,
+		'Section "Test"\n\tMessageBox MB_OK "A long string value" IDYES \\\n\ttrue IDNO false\nSectionEnd\n',
+	);
+});
+
+test('Single oversized arg stays on its own line', () => {
+	const { format } = createFormatter({ printWidth: 40 });
+	const result = format('DetailPrint "This is a very long string that exceeds the print width on its own"\n');
+	assert.is(result, 'DetailPrint \\\n"This is a very long string that exceeds the print width on its own"\n');
+});
+
+test('Trailing comment stays on last wrapped line', () => {
+	const { format } = createFormatter({ printWidth: 40 });
+	const result = format('MessageBox MB_OK "A long string value" IDYES true IDNO false ; a comment\n');
+	assert.ok(result.endsWith('IDNO false ; a comment\n'));
+	assert.ok(result.includes(' \\\n'));
+});
+
+test('Print width 0 disables wrapping', () => {
+	const { format } = createFormatter({ printWidth: 0 });
+	const result = format('MessageBox MB_OK "A long string value" IDYES true IDNO false\n');
+	assert.is(result, 'MessageBox MB_OK "A long string value" IDYES true IDNO false\n');
+});
+
+test('Line wrapping is idempotent', () => {
+	const { format } = createFormatter({ printWidth: 40 });
+	const input = 'MessageBox MB_OK "A long string value" IDYES true IDNO false\n';
+	const first = format(input);
+	const second = format(first);
+	assert.is(first, second);
+});
+
 test.run();

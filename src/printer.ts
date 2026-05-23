@@ -7,6 +7,7 @@ import { rules } from './rules.ts';
 export interface PrinterOptions {
 	useTabs: boolean;
 	indentSize: number;
+	printWidth: number;
 	trimEmptyLines: boolean;
 	eol: string;
 }
@@ -344,11 +345,19 @@ function printInstruction(node: InstructionNode, level: number, options: Printer
 	const kwLower = node.keyword.toLowerCase();
 	const keyword = canonicalCasing.get(kwLower) ?? canonicalIncludes.get(kwLower) ?? node.keyword;
 	const instrParams = instructionParameters.get(kwLower);
-	const splitArgs = arithmeticInstructions.has(kwLower) ? splitArithmeticTokens(node.args) : splitPipeTokens(node.args);
+	const isArithmetic = arithmeticInstructions.has(kwLower);
+	const splitArgs = isArithmetic ? splitArithmeticTokens(node.args) : splitPipeTokens(node.args);
 	const args = splitArgs.map((arg) => normalizeArg(arg, instrParams));
-	const joined = arithmeticInstructions.has(kwLower) ? args.join(' ') : joinWithCompactPipes(args);
+	const indent = indentStr(level, options);
+
+	if (options.printWidth > 0 && args.length > 0) {
+		const trailing = node.comment ? printTrailingComment(node.comment) : undefined;
+		return wrapInstruction(keyword, args, trailing, indent, isArithmetic, options);
+	}
+
+	const joined = isArithmetic ? args.join(' ') : joinWithCompactPipes(args);
 	const parts = args.length > 0 ? `${keyword} ${joined}` : keyword;
-	let line = `${indentStr(level, options)}${parts}`;
+	let line = `${indent}${parts}`;
 
 	if (node.comment) {
 		line += ` ${printTrailingComment(node.comment)}`;
@@ -360,6 +369,44 @@ function printInstruction(node: InstructionNode, level: number, options: Printer
 function printTrailingComment(comment: Comment): string {
 	const marker = comment.style === 'hash' ? '#' : ';';
 	return `${marker} ${comment.value}`;
+}
+
+function wrapInstruction(
+	keyword: string,
+	args: string[],
+	trailingComment: string | undefined,
+	indent: string,
+	isArithmetic: boolean,
+	options: PrinterOptions,
+): string {
+	const joinFn = (tokens: string[]) => (isArithmetic ? tokens.join(' ') : joinWithCompactPipes(tokens));
+	const joined = joinFn(args);
+	const singleLine = args.length > 0 ? `${indent}${keyword} ${joined}` : `${indent}${keyword}`;
+	const fullLine = trailingComment ? `${singleLine} ${trailingComment}` : singleLine;
+
+	if (fullLine.length <= options.printWidth) {
+		return fullLine;
+	}
+
+	const resultLines: string[] = [];
+	let current = `${indent}${keyword}`;
+
+	for (const arg of args) {
+		const candidate = `${current} ${arg}`;
+		if (candidate.length + 2 > options.printWidth && current.length > indent.length) {
+			resultLines.push(`${current} \\`);
+			current = `${indent}${arg}`;
+		} else {
+			current = candidate;
+		}
+	}
+
+	if (trailingComment) {
+		current = `${current} ${trailingComment}`;
+	}
+	resultLines.push(current);
+
+	return resultLines.join(options.eol);
 }
 
 /**

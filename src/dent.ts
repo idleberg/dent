@@ -8,6 +8,7 @@ const defaultIndentation = 2;
 export type DentOptions = {
 	endOfLines?: 'crlf' | 'lf';
 	indentSize?: number;
+	printWidth?: number;
 	trimEmptyLines?: boolean;
 	useTabs?: boolean;
 };
@@ -27,6 +28,7 @@ export type DentFunctions = {
 export function createFormatter(options: DentOptions = {}): DentFunctions {
 	const mergedOptions: DentOptions = {
 		indentSize: defaultIndentation,
+		printWidth: 120,
 		trimEmptyLines: true,
 		useTabs: true,
 		...options,
@@ -54,6 +56,7 @@ export function createFormatter(options: DentOptions = {}): DentFunctions {
 		return print(nodes, {
 			useTabs: mergedOptions.useTabs ?? true,
 			indentSize: mergedOptions.indentSize ?? defaultIndentation,
+			printWidth: mergedOptions.printWidth ?? 120,
 			trimEmptyLines: mergedOptions.trimEmptyLines ?? true,
 			eol,
 		});
