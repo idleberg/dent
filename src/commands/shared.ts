@@ -10,6 +10,7 @@ export type SharedOptions = FormattingOptions & { debug: boolean };
 export type DentOptions = {
 	endOfLines: 'crlf' | 'lf';
 	indentSize: number;
+	printWidth: number;
 	trimEmptyLines: boolean;
 	useTabs: boolean;
 };
@@ -48,6 +49,7 @@ export function dentOptionsFrom(options: FormattingOptions): DentOptions {
 	return {
 		endOfLines: options.eol,
 		indentSize: options.indentSize,
+		printWidth: options.printWidth,
 		trimEmptyLines: options.trim,
 		useTabs: !options.useSpaces,
 	};

@@ -7,6 +7,7 @@ export const defaultLineEndings = platform() === 'win32' ? 'crlf' : 'lf';
 export type FormattingOptions = {
 	eol: 'crlf' | 'lf';
 	indentSize: number;
+	printWidth: number;
 	useSpaces: boolean;
 	trim: boolean;
 };
@@ -33,6 +34,12 @@ export function applyFormattingOptions(cmd: Command): Command {
 			'number of units per indentation level',
 			(value) => Number.parseInt(value, 10),
 			2,
+		)
+		.option(
+			'-p, --print-width <number>',
+			'maximum line width before wrapping with line continuations (0 to disable)',
+			(value) => Number.parseInt(value, 10),
+			120,
 		)
 		.option('-s, --use-spaces', 'indent with spaces instead of tabs', false)
 		.option('-T, --no-trim', 'do not trim empty lines');
