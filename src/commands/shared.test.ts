@@ -9,16 +9,19 @@ import { dentOptionsFrom, loadScript, prepareAction, resolveFiles } from './shar
 
 describe('dentOptionsFrom', () => {
 	it('maps CLI options to dent formatter options', () => {
-		expect(dentOptionsFrom({ eol: 'lf', indentSize: 4, useSpaces: true, trim: false })).toEqual({
+		expect(dentOptionsFrom({ eol: 'lf', indentSize: 4, printWidth: 120, useSpaces: true, trim: false })).toEqual({
 			endOfLine: 'lf',
 			indentSize: 4,
+			printWidth: 120,
 			trimEmptyLines: false,
 			useTabs: false,
 		});
 	});
 
 	it('inverts useSpaces into useTabs', () => {
-		expect(dentOptionsFrom({ eol: 'crlf', indentSize: 2, useSpaces: false, trim: true })).toMatchObject({
+		expect(
+			dentOptionsFrom({ eol: 'crlf', indentSize: 2, printWidth: 120, useSpaces: false, trim: true }),
+		).toMatchObject({
 			useTabs: true,
 		});
 	});
