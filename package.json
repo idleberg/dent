@@ -9,7 +9,7 @@
 		"lint": "concurrently --prefix-colors blue,green,magenta npm:lint:*",
 		"lint:biome": "biome check",
 		"lint:e18e": "e18e-cli analyze",
-		"prepack": "npm run build",
+		"prepublishOnly": "npm run build",
 		"publish:jsr": "deno publish",
 		"publish:npm": "np",
 		"start": "npm run build -- --watch",
