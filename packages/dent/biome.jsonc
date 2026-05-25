@@ -1,6 +1,0 @@
-{
-	"extends": ["@idleberg/configs/biome"],
-	"files": {
-		"includes": ["**", "!src/grammar.js", "!src/grammar.d.ts"]
-	}
-}
