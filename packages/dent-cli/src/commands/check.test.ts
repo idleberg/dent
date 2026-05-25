@@ -3,9 +3,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Command } from 'commander';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { logger } from '../log.ts';
-import { checkCommand } from './check.ts';
-import * as shared from './shared.ts';
+import { logger } from '../log.js';
+import { checkCommand } from './check.js';
+import * as shared from './shared.js';
 
 const UNFORMATTED = 'Section "demo"\n  DetailPrint "x"\nSectionEnd\n';
 const FORMATTED = 'Section "demo"\n\tDetailPrint "x"\nSectionEnd\n';

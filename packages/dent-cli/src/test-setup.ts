@@ -1,4 +1,4 @@
-import { logger } from './log.ts';
+import { logger } from './log.js';
 
 // silence consola during tests; spies on logger.* still record calls,
 // but the reporter (which writes to stdout) is gated by `level`

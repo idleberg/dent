@@ -1,9 +1,9 @@
 import { glob, readFile } from 'node:fs/promises';
 import type { Command } from 'commander';
 import { blue } from 'kleur/colors';
-import { logger } from '../log.ts';
-import { fileExists } from '../utils.ts';
-import { type FormattingOptions, warnFormattingOptions } from './options.ts';
+import { logger } from '../log.js';
+import { fileExists } from '../utils.js';
+import { type FormattingOptions, warnFormattingOptions } from './options.js';
 
 export type SharedOptions = FormattingOptions & { debug: boolean };
 

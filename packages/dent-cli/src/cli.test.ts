@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { handleCLI } from './cli.ts';
-import { logger } from './log.ts';
+import { handleCLI } from './cli.js';
+import { logger } from './log.js';
 
 describe('handleCLI', () => {
 	const originalArgv = process.argv;

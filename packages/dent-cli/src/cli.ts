@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import { checkCommand } from './commands/check.ts';
-import { formatCommand } from './commands/format.ts';
-import { logger } from './log.ts';
-import { getVersion } from './utils.ts';
+import { checkCommand } from './commands/check.js';
+import { formatCommand } from './commands/format.js';
+import { logger } from './log.js';
+import { getVersion } from './utils.js';
 
 export async function handleCLI(): Promise<void> {
 	const program = new Command('dent');

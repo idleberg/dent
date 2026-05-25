@@ -3,9 +3,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Command } from 'commander';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { logger } from '../log.ts';
-import { applyFormattingOptions } from './options.ts';
-import { dentOptionsFrom, loadScript, prepareAction, resolveFiles } from './shared.ts';
+import { logger } from '../log.js';
+import { applyFormattingOptions } from './options.js';
+import { dentOptionsFrom, loadScript, prepareAction, resolveFiles } from './shared.js';
 
 describe('dentOptionsFrom', () => {
 	it('maps CLI options to dent formatter options', () => {

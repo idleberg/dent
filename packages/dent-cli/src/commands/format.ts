@@ -2,8 +2,8 @@ import { writeFile } from 'node:fs/promises';
 import { createFormatter } from '@nsis/dent';
 import { Command } from 'commander';
 import { blue, dim } from 'kleur/colors';
-import { logger } from '../log.ts';
-import { applyFormattingOptions } from './options.ts';
+import { logger } from '../log.js';
+import { applyFormattingOptions } from './options.js';
 import {
 	dentOptionsFrom,
 	hasStdin,
@@ -12,7 +12,7 @@ import {
 	readStdin,
 	resolveFiles,
 	type SharedOptions,
-} from './shared.ts';
+} from './shared.js';
 
 type FormatOptions = SharedOptions & { write: boolean };
 
