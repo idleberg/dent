@@ -18,8 +18,8 @@ importers:
         specifier: ^21.0.1
         version: 21.0.1
       '@idleberg/configs':
-        specifier: ^0.4.3
-        version: 0.4.3(picomatch@4.0.4)
+        specifier: ^0.4.4
+        version: 0.4.4(picomatch@4.0.4)
       '@types/node':
         specifier: ^24.12.4
         version: 24.12.4
@@ -639,8 +639,8 @@ packages:
     cpu: [loong64]
     os: [linux]
 
-  '@idleberg/configs@0.4.3':
-    resolution: {integrity: sha512-IMocPQ4RhMHRrRunjJpmk8JcTBBptUu6Tl8JSNcNUb9BBE4Hc3M38F/xJ3stEQJ2S7+s3sjtpZVrpWjEynQu1Q==}
+  '@idleberg/configs@0.4.4':
+    resolution: {integrity: sha512-cIfQH/a2i7HpPtckQw2Q9YcG80E+vNHzJ6gbiIBdR7p6lgHmrWMgLPG2/mIt5XjcTbQ6bpycp4/VjNgdjODvtA==}
 
   '@inquirer/ansi@2.0.5':
     resolution: {integrity: sha512-doc2sWgJpbFQ64UflSVd17ibMGDuxO1yKgOgLMwavzESnXjFWJqUeG8saYosqKpHp4kWiM5x1nXvEjbpx90gzw==}
@@ -4035,7 +4035,7 @@ snapshots:
   '@esbuild/linux-loong64@0.15.18':
     optional: true
 
-  '@idleberg/configs@0.4.3(picomatch@4.0.4)':
+  '@idleberg/configs@0.4.4(picomatch@4.0.4)':
     dependencies:
       '@biomejs/biome': 2.4.15
       '@e18e/cli': 0.6.1(picomatch@4.0.4)

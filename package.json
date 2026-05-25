@@ -10,7 +10,7 @@
 		"@changesets/cli": "^2.29.4",
 		"@commitlint/cli": "^21.0.1",
 		"@commitlint/config-conventional": "^21.0.1",
-		"@idleberg/configs": "^0.4.3",
+		"@idleberg/configs": "^0.4.4",
 		"@types/node": "^24.12.4",
 		"concurrently": "^9.2.1",
 		"lefthook": "^2.1.8",
