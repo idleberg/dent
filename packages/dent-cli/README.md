@@ -23,6 +23,10 @@ $ npm install --global @nsis/dent-cli
 $ npx dent --help
 ```
 
+### Native Builds
+
+In the past, you could download precompiled binaries from the release page. This is no longer the case. Instead, feel free to download [ardent](https://github.com/idleberg/ardent), a compatible implementation written in Rust.
+
 ## Usage
 
 The CLI exposes two sub-commands:
