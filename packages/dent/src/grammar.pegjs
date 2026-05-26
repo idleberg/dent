@@ -5,7 +5,7 @@
 {{
 const COMPILER_KEYWORDS = new Set([
   '!addincludedir', '!addplugindir', '!appendfile', '!appendmemfile', '!assert',
-  '!cd', '!define', '!delfile', '!echo', '!else', '!endif', '!error', '!execute',
+  '!cd', '!define', '!delfile', '!echo', '!else', '!elseif', '!endif', '!error', '!execute',
   '!finalize', '!getdllversion', '!gettlbversion', '!if', '!ifdef', '!ifmacrodef',
   '!ifmacrondef', '!ifndef', '!include', '!insertmacro', '!macro', '!macroend',
   '!macroundef', '!makensis', '!packhdr', '!pragma', '!searchparse', '!searchreplace',

@@ -19,6 +19,7 @@ export const canonicalCasing: Map<string, string> = new Map([
 	['!delfile', '!delfile'],
 	['!echo', '!echo'],
 	['!else', '!else'],
+	['!elseif', '!elseif'],
 	['!endif', '!endif'],
 	['!error', '!error'],
 	['!execute', '!execute'],

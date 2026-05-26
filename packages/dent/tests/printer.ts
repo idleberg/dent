@@ -607,6 +607,18 @@ test('Switch/Case formatting is idempotent', () => {
 	assert.is(first, second);
 });
 
+// --- Compiler conditional indentation ---
+
+test('!if / !elseif / !else / !endif indents correctly', () => {
+	const { format } = createFormatter();
+	const input =
+		'!if ${X} == 1\nDetailPrint "one"\n!elseif ${X} == 2\nDetailPrint "two"\n!else\nDetailPrint "other"\n!endif\n';
+	assert.is(
+		format(input),
+		'!if ${X} == 1\n\tDetailPrint "one"\n!elseif ${X} == 2\n\tDetailPrint "two"\n!else\n\tDetailPrint "other"\n!endif\n',
+	);
+});
+
 // --- Print width / line wrapping ---
 
 test('Line under print width is unchanged', () => {
