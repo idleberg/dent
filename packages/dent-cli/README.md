@@ -23,22 +23,6 @@ $ npm install --global @nsis/dent-cli
 $ npx dent --help
 ```
 
-### Scoop
-
-The CLI is available to users of the [Scoop](https://scoop.sh/) package manager.
-
-```powershell
-# Add the bucket
-scoop bucket add nsis https://github.com/NSIS-Dev/scoop-nsis
-
-# Install dent
-scoop install nsis/dent
-```
-
-### Download
-
-As a last resort, you can download [pre-compiled binaries](https://github.com/idleberg/dent-cli/releases/latest) for Windows.
-
 ## Usage
 
 The CLI exposes two sub-commands:
