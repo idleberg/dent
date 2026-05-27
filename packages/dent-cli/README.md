@@ -20,7 +20,7 @@ Or, if you prefer to install the CLI:
 
 ```sh
 $ npm install --global @nsis/dent-cli
-$ npx dent --help
+$ dent --help
 ```
 
 ### Homebrew
