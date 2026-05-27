@@ -7,7 +7,7 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/idleberg/dent/default.yml?style=for-the-badge)](https://github.com/idleberg/dent/actions)
 
 > [!NOTE]  
-> This is the repository for the formatting library. Chances are you are looking for the [CLI tool](https://www.npmjs.com/package/@nsis/dent-cli) instead.
+> This is the repository for the formatting library. Chances are you are looking for the [CLI tool](https://github.com/idleberg/dent/tree/main/packages/dent-cli) instead.
 
 ## Installation
 
