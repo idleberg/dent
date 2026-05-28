@@ -6,6 +6,7 @@ allowBuilds:
   lefthook: true
 
 autoInstallPeers: true
+injectWorkspacePackages: true
 publicHoistPattern:
   - "*@biomejs/biome*"
   - "*@e18e/cli*"
