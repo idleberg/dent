@@ -11,6 +11,7 @@ export type DentOptions = {
 	endOfLine: 'crlf' | 'lf';
 	indentSize: number;
 	printWidth: number;
+	singleQuote: boolean;
 	trimEmptyLines: boolean;
 	useTabs: boolean;
 };
@@ -50,6 +51,7 @@ export function dentOptionsFrom(options: FormattingOptions): DentOptions {
 		endOfLine: options.eol,
 		indentSize: options.indentSize,
 		printWidth: options.printWidth,
+		singleQuote: options.singleQuote,
 		trimEmptyLines: options.trim,
 		useTabs: !options.useSpaces,
 	};

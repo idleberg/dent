@@ -8,6 +8,7 @@ export interface PrinterOptions {
 	useTabs: boolean;
 	indentSize: number;
 	printWidth: number;
+	singleQuote: boolean;
 	trimEmptyLines: boolean;
 	eol: string;
 }
@@ -129,10 +130,64 @@ function printLabel(node: LabelNode, level: number, options: PrinterOptions): st
 	return line;
 }
 
-function normalizeArg(arg: string, instrParams: ReadonlyMap<string, string> | undefined): string {
-	// Skip quoted strings and variables — only normalise bare tokens
-	if (arg.startsWith('"') || arg.startsWith("'") || arg.startsWith('`') || arg.startsWith('$')) {
+function stripQuoteDelimiters(arg: string): [string, string] | undefined {
+	const delim = arg[0];
+	if (delim === '"' || delim === "'" || delim === '`') {
+		return [delim, arg.slice(1, -1)];
+	}
+	return undefined;
+}
+
+function unescapeInner(inner: string): string {
+	return inner.replaceAll('$\\"', '"').replaceAll('""', '"').replaceAll("$\\'", "'").replaceAll('$\\`', '`');
+}
+
+function escapeForDouble(inner: string): string {
+	return inner.replaceAll('"', '$\\"');
+}
+
+function normalizeQuotes(arg: string, singleQuote: boolean): string {
+	const stripped = stripQuoteDelimiters(arg);
+	if (!stripped) return arg;
+
+	const [, inner] = stripped;
+	const target = singleQuote ? "'" : '"';
+	const content = unescapeInner(inner);
+
+	const hasDouble = content.includes('"');
+	const hasSingle = content.includes("'");
+	const hasBacktick = content.includes('`');
+
+	if (!hasDouble && !hasSingle) {
+		return target === '"' ? `"${content}"` : `'${content}'`;
+	}
+
+	const hasTarget = target === '"' ? hasDouble : hasSingle;
+
+	if (!hasTarget) {
+		return target === '"' ? `"${content}"` : `'${content}'`;
+	}
+
+	const alt = target === '"' ? "'" : '"';
+	const hasAlt = alt === '"' ? hasDouble : hasSingle;
+
+	if (!hasAlt) {
+		return alt === '"' ? `"${content}"` : `'${content}'`;
+	}
+
+	if (!hasBacktick) {
+		return `\`${content}\``;
+	}
+
+	return `"${escapeForDouble(content)}"`;
+}
+
+function normalizeArg(arg: string, instrParams: ReadonlyMap<string, string> | undefined, singleQuote: boolean): string {
+	if (arg.startsWith('$')) {
 		return arg;
+	}
+	if (arg.startsWith('"') || arg.startsWith("'") || arg.startsWith('`')) {
+		return normalizeQuotes(arg, singleQuote);
 	}
 
 	const lower = arg.toLowerCase();
@@ -347,7 +402,7 @@ function printInstruction(node: InstructionNode, level: number, options: Printer
 	const instrParams = instructionParameters.get(kwLower);
 	const isArithmetic = arithmeticInstructions.has(kwLower);
 	const splitArgs = isArithmetic ? splitArithmeticTokens(node.args) : splitPipeTokens(node.args);
-	const args = splitArgs.map((arg) => normalizeArg(arg, instrParams));
+	const args = splitArgs.map((arg) => normalizeArg(arg, instrParams, options.singleQuote));
 	const indent = indentStr(level, options);
 
 	if (options.printWidth > 0 && args.length > 0) {

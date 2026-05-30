@@ -8,6 +8,7 @@ export type FormattingOptions = {
 	eol: 'crlf' | 'lf';
 	indentSize: number;
 	printWidth: number;
+	singleQuote: boolean;
 	useSpaces: boolean;
 	trim: boolean;
 };
@@ -41,6 +42,7 @@ export function applyFormattingOptions(cmd: Command): Command {
 			(value) => Number.parseInt(value, 10),
 			120,
 		)
+		.option('-q, --single-quote', 'prefer single quotes instead of double quotes', false)
 		.option('-s, --use-spaces', 'indent with spaces instead of tabs', false)
 		.option('-T, --no-trim', 'do not trim empty lines');
 }

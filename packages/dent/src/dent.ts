@@ -9,6 +9,7 @@ export type DentOptions = {
 	endOfLine?: 'crlf' | 'lf';
 	indentSize?: number;
 	printWidth?: number;
+	singleQuote?: boolean;
 	trimEmptyLines?: boolean;
 	useTabs?: boolean;
 };
@@ -29,6 +30,7 @@ export function createFormatter(options: DentOptions = {}): DentFunctions {
 	const mergedOptions: DentOptions = {
 		indentSize: defaultIndentation,
 		printWidth: 120,
+		singleQuote: false,
 		trimEmptyLines: true,
 		useTabs: true,
 		...options,
@@ -57,6 +59,7 @@ export function createFormatter(options: DentOptions = {}): DentFunctions {
 			useTabs: mergedOptions.useTabs ?? true,
 			indentSize: mergedOptions.indentSize ?? defaultIndentation,
 			printWidth: mergedOptions.printWidth ?? 120,
+			singleQuote: mergedOptions.singleQuote ?? false,
 			trimEmptyLines: mergedOptions.trimEmptyLines ?? true,
 			eol,
 		});

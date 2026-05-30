@@ -32,6 +32,14 @@ test('Returns null for already trimmed empty lines', async () => {
 	assert.is(check(expected), null);
 });
 
+test('Returns null for already formatted quotes', async () => {
+	const { check } = createFormatter();
+
+	const expected = await fs.readFile(resolve(process.cwd(), 'tests/expected/quotes.nsi'), 'utf8');
+
+	assert.is(check(expected), null);
+});
+
 // --- Unformatted input returns formatted string ---
 
 test('Returns formatted string for unformatted indentation', async () => {
@@ -59,6 +67,15 @@ test('Returns formatted string for excess empty lines', async () => {
 
 	const fixture = await fs.readFile(resolve(process.cwd(), 'tests/fixtures/empty-lines.nsi'), 'utf8');
 	const expected = await fs.readFile(resolve(process.cwd(), 'tests/expected/empty-lines.nsi'), 'utf8');
+
+	assert.is(check(fixture), expected);
+});
+
+test('Returns formatted string for unformatted quotes', async () => {
+	const { check } = createFormatter();
+
+	const fixture = await fs.readFile(resolve(process.cwd(), 'tests/fixtures/quotes.nsi'), 'utf8');
+	const expected = await fs.readFile(resolve(process.cwd(), 'tests/expected/quotes.nsi'), 'utf8');
 
 	assert.is(check(fixture), expected);
 });

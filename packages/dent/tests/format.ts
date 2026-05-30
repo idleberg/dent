@@ -60,4 +60,14 @@ test('Explicit empty lines', async () => {
 	assert.is(format(fixture), expected);
 });
 
+test('Quotes', async () => {
+	const { format } = createFormatter();
+
+	const fixture = await fs.readFile(resolve(process.cwd(), 'tests/fixtures/quotes.nsi'), 'utf8');
+
+	const expected = await fs.readFile(resolve(process.cwd(), 'tests/expected/quotes.nsi'), 'utf8');
+
+	assert.is(format(fixture), expected);
+});
+
 test.run();
