@@ -1,5 +1,11 @@
 # @nsis/dent-cli
 
+## 0.9.1
+
+### Patch Changes
+
+- c747c23: fix: retrigger release
+
 ## 0.9.0
 
 ### Minor Changes
