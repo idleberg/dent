@@ -84,12 +84,13 @@ Line
   / BlankLine
   / CommentLine
   / LabelWithInstruction
+  / QuotedLabelLine
   / LabelLine
   / InstructionLine
 
 BlankLine
-  = _ EOL
-  { return { type: 'blank' }; }
+  = _ EOL { return { type: 'blank' }; }
+  / [ \t]+ EOF { return { type: 'blank' }; }
 
 CommentLine
   = _ style:("#" / ";") value:$[^\r\n]* LineEnd
@@ -99,17 +100,29 @@ BlockComment
   = _ "/*" value:$(!"*/" (. / [\r\n]))* "*/" _ LineEnd?
   { return { type: 'comment', style: 'block', value }; }
 
+QuotedLabelLine
+  = _ "\"" label:$((!(":\"") [^"])*) ":\"" !":" trailing:TrailingComment? _ LineEnd
+  { return { type: 'label', name: label, comment: trailing ?? undefined }; }
+
 LabelLine
-  = _ label:$([a-zA-Z_.] [a-zA-Z0-9_.]*) ":" !":" trailing:TrailingComment? _ LineEnd
+  = _ label:$(LabelSegment+) ":" !":" trailing:TrailingComment? _ LineEnd
   { return { type: 'label', name: label, comment: trailing ?? undefined }; }
 
 LabelWithInstruction
-  = _ label:$([a-zA-Z_.] [a-zA-Z0-9_.]*) ":" !":" _ keyword:Keyword args:Arguments trailing:TrailingComment? _ LineEnd
+  = _ label:$(LabelSegment+) ":" !":" _ keyword:Keyword args:Arguments trailing:TrailingComment? _ LineEnd
   { return [
       { type: 'label', name: label },
       { type: 'instruction', keyword, args, ...(trailing ? { comment: trailing } : {}) },
     ];
   }
+
+LabelSegment
+  = "${" LabelBraceInner* "}"
+  / [a-zA-Z0-9_.\-/]
+
+LabelBraceInner
+  = "${" LabelBraceInner* "}"
+  / (!"}" .)
 
 InstructionLine
   = _ keyword:Keyword args:Arguments trailing:TrailingComment? _ LineEnd
@@ -132,10 +145,14 @@ CompilerKeyword
 
 
 MacroKeyword
-  = $("${" [a-zA-Z_][a-zA-Z0-9_.]* "}")
+  = $("${" MacroKeywordInner+ "}")
+
+MacroKeywordInner
+  = "${" MacroKeywordInner+ "}"
+  / !("${" / "}") [^ \t\r\n]
 
 PluginCallKeyword
-  = $([a-zA-Z][a-zA-Z0-9_]* "::" [a-zA-Z][a-zA-Z0-9_]*)
+  = $([a-zA-Z][a-zA-Z0-9_]* "::" [a-zA-Z_][a-zA-Z0-9_]*)
 
 InstructionKeyword
   = kw:$([a-zA-Z][a-zA-Z0-9]*) &{ return INSTRUCTION_LOOKUP.has(kw.toLowerCase()); } { return kw; }

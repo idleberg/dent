@@ -6,6 +6,7 @@ import { logger } from '../log.ts';
 import { applyFormattingOptions } from './options.ts';
 import {
 	dentOptionsFrom,
+	formatParseError,
 	hasStdin,
 	loadScript,
 	prepareAction,
@@ -36,8 +37,13 @@ async function runFormat(patterns: string[], options: FormatOptions): Promise<vo
 
 	if (!patterns.length && hasStdin()) {
 		const rawContents = await readStdin();
-		const result = check(rawContents);
-		process.stdout.write(result ?? rawContents);
+		try {
+			const result = check(rawContents);
+			process.stdout.write(result ?? rawContents);
+		} catch (error) {
+			logger.error(`${formatParseError(error)}`);
+			process.exit(2);
+		}
 		return;
 	}
 
@@ -59,7 +65,18 @@ async function runFormat(patterns: string[], options: FormatOptions): Promise<vo
 		const rawContents = await loadScript(file);
 		if (rawContents === null) continue;
 
-		const result = check(rawContents);
+		let result: string | null;
+		try {
+			result = check(rawContents);
+		} catch (error) {
+			const duration = Math.round(performance.now() - startTime);
+			if (options.write) {
+				logger.error(`${blue(file)}: ${formatParseError(error)} ${dim(`(${duration}ms)`)}`);
+			} else {
+				logger.error(`${blue(file)}: ${formatParseError(error)}`);
+			}
+			continue;
+		}
 		const duration = Math.round(performance.now() - startTime);
 
 		if (options.write) {

@@ -61,6 +61,14 @@ export async function resolveFiles(patterns: string[]): Promise<string[]> {
 	return Array.fromAsync(glob(patterns, { cwd: process.cwd() }));
 }
 
+export function formatParseError(error: unknown): string {
+	if (error instanceof SyntaxError && 'location' in error) {
+		const loc = (error as SyntaxError & { location: { start: { line: number; column: number } } }).location;
+		return `Parse error at line ${loc.start.line}, column ${loc.start.column}: ${error.message}`;
+	}
+	return String(error);
+}
+
 export async function loadScript(file: string): Promise<string | null> {
 	if (!file.endsWith('.nsi') && !file.endsWith('.nsh')) {
 		logger.warn(`${blue(file)} is not an NSIS script, skipping.`);

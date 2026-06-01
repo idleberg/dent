@@ -6,6 +6,7 @@ import { logger } from '../log.ts';
 import { applyFormattingOptions } from './options.ts';
 import {
 	dentOptionsFrom,
+	formatParseError,
 	hasStdin,
 	loadScript,
 	prepareAction,
@@ -41,7 +42,14 @@ async function runCheck(patterns: string[], options: CheckOptions): Promise<void
 		}
 		const startTime = performance.now();
 		const rawContents = await readStdin();
-		const result = check(rawContents);
+		let result: string | null;
+		try {
+			result = check(rawContents);
+		} catch (error) {
+			const duration = Math.round(performance.now() - startTime);
+			logger.error(`${formatParseError(error)} ${dim(`(${duration}ms)`)}`);
+			process.exit(2);
+		}
 		const duration = Math.round(performance.now() - startTime);
 
 		if (result !== null) {
@@ -72,7 +80,14 @@ async function runCheck(patterns: string[], options: CheckOptions): Promise<void
 		const rawContents = await loadScript(file);
 		if (rawContents === null) continue;
 
-		const result = check(rawContents);
+		let result: string | null;
+		try {
+			result = check(rawContents);
+		} catch (error) {
+			const duration = Math.round(performance.now() - startTime);
+			logger.error(`${blue(file)}: ${formatParseError(error)} ${dim(`(${duration}ms)`)}`);
+			continue;
+		}
 		const duration = Math.round(performance.now() - startTime);
 
 		if (result === null) {
