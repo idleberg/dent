@@ -181,6 +181,45 @@ test('Backtick string with escaped backtick', () => {
 	assert.equal(node.args, ['`Quote $\\`This$\\``']);
 });
 
+// --- Unicode ---
+
+test('Parses unicode fixture', async () => {
+	const input = await fs.readFile(resolve(process.cwd(), 'tests/fixtures/unicode.nsi'), 'utf8');
+	const nodes = parse(input);
+	assert.ok(Array.isArray(nodes));
+	assert.ok(nodes.length > 0);
+});
+
+test('Unicode strings preserved in arguments', () => {
+	const node = parse('DetailPrint "שלום, עולם!"\n')[0] as InstructionNode;
+	assert.is(node.type, 'instruction');
+	assert.equal(node.args, ['"שלום, עולם!"']);
+});
+
+test('Multiple scripts in different languages', () => {
+	const lines = [
+		'DetailPrint "こんにちは、世界！"\n',
+		'DetailPrint "привет, мир!"\n',
+		'DetailPrint "안녕하세요!"\n',
+		'DetailPrint "สวัสดีชาวโลก!"\n',
+		'DetailPrint "Γεια σου, Κόσμε!"\n',
+	];
+	for (const line of lines) {
+		const node = parse(line)[0] as InstructionNode;
+		assert.is(node.type, 'instruction');
+		assert.is(node.keyword, 'DetailPrint');
+	}
+});
+
+test('BOM prefix is stripped', () => {
+	const input = '﻿; BOM test\nDetailPrint "שלום"\n';
+	const nodes = parse(input);
+	assert.ok(nodes.length > 0);
+	const instr = nodes.find((n: CSTNode) => (n as InstructionNode).type === 'instruction') as InstructionNode;
+	assert.is(instr.keyword, 'DetailPrint');
+	assert.equal(instr.args, ['"שלום"']);
+});
+
 // --- Strict keyword validation ---
 
 test('Unknown keyword rejects', () => {
