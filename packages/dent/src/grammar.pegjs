@@ -140,7 +140,11 @@ CompilerKeyword
 
 
 MacroKeyword
-  = $("${" [a-zA-Z_][a-zA-Z0-9_.]* "}")
+  = $("${" MacroKeywordInner+ "}")
+
+MacroKeywordInner
+  = "${" MacroKeywordInner+ "}"
+  / !("${" / "}") [^ \t\r\n]
 
 PluginCallKeyword
   = $([a-zA-Z][a-zA-Z0-9_]* "::" [a-zA-Z][a-zA-Z0-9_]*)
