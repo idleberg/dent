@@ -1,5 +1,11 @@
 # @nsis/dent
 
+## 0.12.1
+
+### Patch Changes
+
+- fcc32f4: implement various fixes from corpus checks
+
 ## 0.12.0
 
 ### Minor Changes
