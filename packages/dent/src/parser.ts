@@ -39,6 +39,6 @@ export type CSTNode = BlankNode | CommentNode | InstructionNode | LabelNode;
  */
 export function parse(input: string): CSTNode[] {
 	// Strip BOM and handle line continuations before parsing
-	const preprocessed = input.replace(/^\uFEFF/, '').replace(/\\\r?\n[ \t]*/g, ' ');
+	const preprocessed = input.replace(/^\uFEFF/, '').replace(/\\[ \t]*\r?\n[ \t]*/g, ' ');
 	return peggyParse(preprocessed) as CSTNode[];
 }
