@@ -1,6 +1,6 @@
 import { canonicalCasing } from './canonical-casing.ts';
 import { canonicalIncludes } from './canonical-includes.ts';
-import { globalParameterPrefixes, globalParameters, instructionParameters } from './canonical-parameters.ts';
+import { isArithmeticKeyword, joinInstructionArgs, normalizeInstructionArgs } from './normalize.ts';
 import type { Comment, CommentNode, CSTNode, InstructionNode, LabelNode } from './parser.ts';
 import { rules } from './rules.ts';
 
@@ -130,279 +130,11 @@ function printLabel(node: LabelNode, level: number, options: PrinterOptions): st
 	return line;
 }
 
-function stripQuoteDelimiters(arg: string): [string, string] | undefined {
-	const delim = arg[0];
-	if (delim === '"' || delim === "'" || delim === '`') {
-		return [delim, arg.slice(1, -1)];
-	}
-	return undefined;
-}
-
-function unescapeInner(inner: string): string {
-	return inner.replaceAll('$\\"', '"').replaceAll('""', '"').replaceAll("$\\'", "'").replaceAll('$\\`', '`');
-}
-
-function escapeForDouble(inner: string): string {
-	return inner.replaceAll('"', '$\\"');
-}
-
-function normalizeQuotes(arg: string, singleQuote: boolean): string {
-	const stripped = stripQuoteDelimiters(arg);
-	if (!stripped) return arg;
-
-	const [, inner] = stripped;
-	const target = singleQuote ? "'" : '"';
-	const content = unescapeInner(inner);
-
-	const hasDouble = content.includes('"');
-	const hasSingle = content.includes("'");
-	const hasBacktick = content.includes('`');
-
-	if (!hasDouble && !hasSingle) {
-		return target === '"' ? `"${content}"` : `'${content}'`;
-	}
-
-	const hasTarget = target === '"' ? hasDouble : hasSingle;
-
-	if (!hasTarget) {
-		return target === '"' ? `"${content}"` : `'${content}'`;
-	}
-
-	const alt = target === '"' ? "'" : '"';
-	const hasAlt = alt === '"' ? hasDouble : hasSingle;
-
-	if (!hasAlt) {
-		return alt === '"' ? `"${content}"` : `'${content}'`;
-	}
-
-	if (!hasBacktick) {
-		return `\`${content}\``;
-	}
-
-	return `"${escapeForDouble(content)}"`;
-}
-
-function normalizeArg(arg: string, instrParams: ReadonlyMap<string, string> | undefined, singleQuote: boolean): string {
-	if (arg.startsWith('$')) {
-		return arg;
-	}
-	if (arg.startsWith('"') || arg.startsWith("'") || arg.startsWith('`')) {
-		return normalizeQuotes(arg, singleQuote);
-	}
-
-	const lower = arg.toLowerCase();
-
-	// Exact match — check instruction-specific params first, then global
-	const exact = instrParams?.get(lower) ?? globalParameters.get(lower);
-	if (exact !== undefined) return exact;
-
-	// Parameterised prefix (e.g. /LANG=1033, /CHARSET=UTF8)
-	const eqIdx = arg.indexOf('=');
-	if (eqIdx > 0) {
-		const prefixLower = `${lower.slice(0, eqIdx + 1)}`;
-		const canonical = globalParameterPrefixes.get(prefixLower);
-		if (canonical !== undefined) {
-			return `${canonical}${arg.slice(eqIdx + 1)}`;
-		}
-	}
-
-	return arg;
-}
-
-/**
- * Splits bare tokens that contain pipes into separate tokens with `|` as
- * a standalone separator. Handles all spacing variants:
- * - `MB_OK|MB_DEFBUTTON1` → `['MB_OK', '|', 'MB_DEFBUTTON1']`
- * - `|MB_DEFBUTTON1`      → `['|', 'MB_DEFBUTTON1']`
- * - `MB_OK|`              → `['MB_OK', '|']`
- * - `$1|$2`               → `['$1', '|', '$2']`
- *
- * Quoted strings are never split. `${…}` groups within tokens are preserved.
- */
-function splitPipeTokens(args: string[]): string[] {
-	return args.flatMap((arg) => {
-		if (arg.startsWith('"') || arg.startsWith("'") || arg.startsWith('`')) {
-			return [arg];
-		}
-		if (!arg.includes('|') || arg === '|') {
-			return [arg];
-		}
-		return splitPreservingGroups(arg, '|');
-	});
-}
-
-/**
- * Splits a bare token on a single separator character, preserving `${…}`
- * groups (the separator inside braces is not treated as a split point).
- */
-function splitPreservingGroups(arg: string, sep: string): string[] {
-	const result: string[] = [];
-	let current = '';
-	let i = 0;
-
-	while (i < arg.length) {
-		// Preserve ${…} groups
-		if (arg[i] === '$' && arg[i + 1] === '{') {
-			const end = arg.indexOf('}', i + 2);
-			if (end !== -1) {
-				current += arg.slice(i, end + 1);
-				i = end + 1;
-				continue;
-			}
-		}
-
-		if (arg[i] === sep) {
-			if (current) result.push(current);
-			current = '';
-			result.push(sep);
-			i++;
-			continue;
-		}
-
-		current += arg[i];
-		i++;
-	}
-
-	if (current) result.push(current);
-	return result;
-}
-
-/**
- * Instructions whose arguments may contain arithmetic/bitwise operators
- * that should be split into separate tokens.
- */
-const arithmeticInstructions = new Set(['intop', 'intptrop']);
-
-/**
- * Splits bare tokens on arithmetic/bitwise operators for IntOp/IntPtrOp.
- * Handles both single-char (`+`, `-`, `*`, `/`, `%`, `&`, `^`, `~`, `!`)
- * and multi-char (`||`, `&&`, `<<`, `>>`) operators.
- *
- * Special handling for `-`: treated as unary (stays attached to the next
- * token) when it follows another operator or appears at the start.
- * - `$1+$2`   → `['$1', '+', '$2']`
- * - `$1+-$2`  → `['$1', '+', '-$2']`
- * - `$1-$2`   → `['$1', '-', '$2']`
- */
-function splitArithmeticTokens(args: string[]): string[] {
-	return args.flatMap((arg) => {
-		if (arg.startsWith('"') || arg.startsWith("'") || arg.startsWith('`')) {
-			return [arg];
-		}
-		// Already a standalone operator — pass through
-		if (ARITHMETIC_OPS.has(arg)) {
-			return [arg];
-		}
-		return tokenizeArithmetic(arg);
-	});
-}
-
-const ARITHMETIC_OPS = new Set(['>>>', '||', '&&', '<<', '>>', '+', '-', '*', '/', '%', '|', '&', '^', '~', '!']);
-const SINGLE_CHAR_OPS = new Set(['+', '-', '*', '/', '%', '|', '&', '^', '~', '!']);
-
-function tokenizeArithmetic(arg: string): string[] {
-	const result: string[] = [];
-	let current = '';
-	let lastWasOp = true; // start counts as "after operator" for unary detection
-	let i = 0;
-
-	while (i < arg.length) {
-		// Preserve ${…} groups
-		if (arg[i] === '$' && arg[i + 1] === '{') {
-			const end = arg.indexOf('}', i + 2);
-			if (end !== -1) {
-				current += arg.slice(i, end + 1);
-				i = end + 1;
-				lastWasOp = false;
-				continue;
-			}
-		}
-
-		// Check three-char operators first
-		if (i + 2 < arg.length) {
-			const three = arg.slice(i, i + 3);
-			if (ARITHMETIC_OPS.has(three)) {
-				if (current) {
-					result.push(current);
-					current = '';
-				}
-				result.push(three);
-				lastWasOp = true;
-				i += 3;
-				continue;
-			}
-		}
-
-		// Check two-char operators
-		if (i + 1 < arg.length) {
-			const two = arg.slice(i, i + 2);
-			if (ARITHMETIC_OPS.has(two)) {
-				if (current) {
-					result.push(current);
-					current = '';
-				}
-				result.push(two);
-				lastWasOp = true;
-				i += 2;
-				continue;
-			}
-		}
-
-		// Check single-char operators
-		const ch = arg[i] as string;
-		if (SINGLE_CHAR_OPS.has(ch)) {
-			// `-` after another operator (or at start) is unary — keep attached
-			if (ch === '-' && lastWasOp) {
-				current += ch;
-				i++;
-				continue;
-			}
-			if (current) {
-				result.push(current);
-				current = '';
-			}
-			result.push(ch);
-			lastWasOp = true;
-			i++;
-			continue;
-		}
-
-		current += ch;
-		lastWasOp = false;
-		i++;
-	}
-
-	if (current) result.push(current);
-	return result.length > 0 ? result : [arg];
-}
-
-/**
- * Joins args so that `|` tokens are compact (no surrounding spaces).
- * `['MB_OK', '|', 'MB_DEFBUTTON1', '"Hello"']` → `'MB_OK|MB_DEFBUTTON1 "Hello"'`
- */
-function joinWithCompactPipes(args: string[]): string {
-	let result = '';
-	for (let i = 0; i < args.length; i++) {
-		const arg = args[i] as string;
-		if (arg === '|') {
-			result += '|';
-		} else if (i > 0 && args[i - 1] === '|') {
-			result += arg;
-		} else {
-			if (result) result += ' ';
-			result += arg;
-		}
-	}
-	return result;
-}
-
 function printInstruction(node: InstructionNode, level: number, options: PrinterOptions): string {
 	const kwLower = node.keyword.toLowerCase();
 	const keyword = canonicalCasing.get(kwLower) ?? canonicalIncludes.get(kwLower) ?? node.keyword;
-	const instrParams = instructionParameters.get(kwLower);
-	const isArithmetic = arithmeticInstructions.has(kwLower);
-	const splitArgs = isArithmetic ? splitArithmeticTokens(node.args) : splitPipeTokens(node.args);
-	const args = splitArgs.map((arg) => normalizeArg(arg, instrParams, options.singleQuote));
+	const isArithmetic = isArithmeticKeyword(kwLower);
+	const args = normalizeInstructionArgs(node.args, node.keyword, options.singleQuote);
 	const indent = indentStr(level, options);
 
 	if (options.printWidth > 0 && args.length > 0) {
@@ -410,7 +142,7 @@ function printInstruction(node: InstructionNode, level: number, options: Printer
 		return wrapInstruction(keyword, args, trailing, indent, isArithmetic, options);
 	}
 
-	const joined = isArithmetic ? args.join(' ') : joinWithCompactPipes(args);
+	const joined = joinInstructionArgs(args, node.keyword);
 	const parts = args.length > 0 ? `${keyword} ${joined}` : keyword;
 	let line = `${indent}${parts}`;
 
@@ -434,7 +166,7 @@ function wrapInstruction(
 	isArithmetic: boolean,
 	options: PrinterOptions,
 ): string {
-	const joinFn = (tokens: string[]) => (isArithmetic ? tokens.join(' ') : joinWithCompactPipes(tokens));
+	const joinFn = (tokens: string[]) => (isArithmetic ? tokens.join(' ') : joinInstructionArgs(tokens, keyword));
 	const joined = joinFn(args);
 	const singleLine = args.length > 0 ? `${indent}${keyword} ${joined}` : `${indent}${keyword}`;
 	const fullLine = trailingComment ? `${singleLine} ${trailingComment}` : singleLine;
