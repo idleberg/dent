@@ -1,5 +1,14 @@
 # @nsis/dent-cli
 
+## 0.9.3
+
+### Patch Changes
+
+- a703fa5: add summary in completion text
+- b7bc5a1: unify CLI command execution loops
+- Updated dependencies [3bf8db5]
+  - @nsis/dent@0.12.2
+
 ## 0.9.2
 
 ### Patch Changes

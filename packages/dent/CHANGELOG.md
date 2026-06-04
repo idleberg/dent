@@ -1,5 +1,12 @@
 # @nsis/dent
 
+## 0.12.2
+
+### Patch Changes
+
+- ccec13a extract blank-line transforms
+- 2897e97 extract token transforms from printer
+
 ## 0.12.1
 
 ### Patch Changes
