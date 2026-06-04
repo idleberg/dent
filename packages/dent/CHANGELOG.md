@@ -1,5 +1,13 @@
 # @nsis/dent
 
+## 0.12.3
+
+### Patch Changes
+
+- 5ccc1e9: separate language parser from dent package
+- Updated dependencies [5ccc1e9]
+  - @nsis/parser@0.1.0
+
 ## 0.12.2
 
 ### Patch Changes
