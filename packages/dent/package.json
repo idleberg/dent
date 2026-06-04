@@ -4,18 +4,13 @@
 	"description": "An opinionated code formatter for NSIS scripts",
 	"license": "MIT",
 	"scripts": {
-		"build": "npm run build:peggy && npm run build:lib",
-		"build:lib": "tsdown",
-		"build:peggy": "peggy --format es --dts --output src/grammar.js src/grammar.pegjs",
-		"dev": "concurrently --prefix-colors blue,green,magenta npm:dev:*",
-		"dev:lib": "npm run build:lib -- --watch",
-		"dev:peggy": "npm run build:peggy -- --watch",
+		"build": "tsdown",
+		"dev": "npm run build -- --watch",
 		"lint": "concurrently --prefix-colors blue,green,magenta npm:lint:*",
 		"lint:biome": "biome check",
 		"lint:biome:ci": "biome ci",
 		"lint:e18e": "e18e-cli analyze --log-level error",
 		"prepack": "npm run build",
-		"pretest": "npm run build:peggy",
 		"publish:jsr": "deno publish",
 		"publish:npm": "np",
 		"test": "uvu -r tsm tests"
@@ -43,10 +38,10 @@
 		"formatter"
 	],
 	"dependencies": {
+		"@nsis/parser": "workspace:*",
 		"detect-newline": "^4.0.1"
 	},
 	"devDependencies": {
-		"peggy": "^5.1.0",
 		"tsm": "^2.3.0",
 		"uvu": "^0.5.6"
 	}

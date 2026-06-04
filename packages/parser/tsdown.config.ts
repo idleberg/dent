@@ -7,8 +7,7 @@ export default defineConfig((options) => {
 		target: 'node20',
 		clean: isProduction,
 		dts: isProduction,
-		entry: ['src/dent.ts'],
-		neverBundle: ['@nsis/parser', 'detect-newline'],
+		entry: ['src/index.ts'],
 		format: 'esm',
 		minify: isProduction,
 	};

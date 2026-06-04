@@ -1,6 +1,6 @@
 import { platform } from 'node:os';
+import { parse } from '@nsis/parser';
 import { detectNewline } from 'detect-newline';
-import { parse } from './parser.ts';
 import { print } from './printer.ts';
 
 const defaultIndentation = 2;

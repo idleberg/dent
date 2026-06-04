@@ -1,7 +1,7 @@
+import type { CSTNode } from '@nsis/parser';
 import { test } from 'uvu';
 import * as assert from 'uvu/assert';
 import { ensureBlankAroundBlocks, trimAndCollapseBlanks } from '../src/blank-lines.js';
-import type { CSTNode } from '../src/parser.js';
 
 const blank: CSTNode = { type: 'blank' };
 const instr = (keyword: string): CSTNode => ({ type: 'instruction', keyword, args: [] });

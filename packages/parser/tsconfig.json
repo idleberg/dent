@@ -1,0 +1,4 @@
+{
+	"extends": "@idleberg/configs/tsc",
+	"exclude": ["src/grammar.js"]
+}

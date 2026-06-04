@@ -1,8 +1,8 @@
+import type { Comment, CommentNode, CSTNode, InstructionNode, LabelNode } from '@nsis/parser';
 import { ensureBlankAroundBlocks, trimAndCollapseBlanks } from './blank-lines.ts';
 import { canonicalCasing } from './canonical-casing.ts';
 import { canonicalIncludes } from './canonical-includes.ts';
 import { isArithmeticKeyword, joinInstructionArgs, normalizeInstructionArgs } from './normalize.ts';
-import type { Comment, CommentNode, CSTNode, InstructionNode, LabelNode } from './parser.ts';
 import { rules } from './rules.ts';
 
 export interface PrinterOptions {

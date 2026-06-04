@@ -1,4 +1,4 @@
-import type { CSTNode } from './parser.ts';
+import type { CSTNode } from '@nsis/parser';
 import { rules } from './rules.ts';
 
 function isBlockOpen(node: CSTNode): boolean {
