@@ -1,5 +1,5 @@
 ---
-"@nsis/parser": patch
+"@nsis/parser": minor
 "@nsis/dent": patch
 ---
 
