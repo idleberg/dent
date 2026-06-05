@@ -7,7 +7,7 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/idleberg/dent/default.yml?style=for-the-badge)](https://github.com/idleberg/dent/actions)
 
 > [!NOTE]  
-> This is the repository for the formatting library. Chances are you are looking for the [CLI tool](https://github.com/idleberg/dent/tree/main/packages/dent-cli) instead.
+> This is the repository for the formatting library powering the [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=idleberg.nsis) and [Pulsar](https://packages.pulsar-edit.dev/packages/language-nsis) packages. Chances are you were looking for the [CLI tool](https://github.com/idleberg/dent/tree/main/packages/dent-cli).
 
 ## Installation
 
