@@ -14,40 +14,42 @@ export type FormattingOptions = {
 };
 
 export function applyFormattingOptions(cmd: Command): Command {
-	return cmd
-		.optionsGroup('Formatting Options')
-		.option(
-			'-e, --eol <"crlf"|"lf">',
-			'control how line-breaks are represented',
-			(value) => {
-				if (!['crlf', 'lf'].includes(value)) {
-					logger.warn(`Invalid EOL value provided, defaulting to "${defaultLineEndings}".`);
+	return (
+		cmd
+			.optionsGroup('Formatting Options')
+			.option(
+				'-e, --eol <"crlf"|"lf">',
+				'control how line-breaks are represented',
+				(value) => {
+					if (!['crlf', 'lf'].includes(value)) {
+						logger.warn(`Invalid EOL value provided, defaulting to "${defaultLineEndings}".`);
 
-					return defaultLineEndings;
-				}
+						return defaultLineEndings;
+					}
 
-				return value;
-			},
-			defaultLineEndings,
-		)
-		.option(
-			'-i, --indent-size <number>',
-			'number of units per indentation level',
-			(value) => Number.parseInt(value, 10),
-			2,
-		)
-		.option(
-			'-p, --print-width <number>',
-			'maximum line width before wrapping with line continuations (0 to disable)',
-			(value) => Number.parseInt(value, 10),
-			120,
-		)
-		.option('-q, --single-quote', 'prefer single quotes instead of double quotes', false)
-		.option('-s, --use-spaces', 'indent with spaces instead of tabs', false)
-		.option('-T, --no-trim', 'do not trim empty lines')
+					return value;
+				},
+				defaultLineEndings,
+			)
+			.option(
+				'-i, --indent-size <number>',
+				'number of units per indentation level',
+				(value) => Number.parseInt(value, 10),
+				2,
+			)
+			.option(
+				'-p, --print-width <number>',
+				'maximum line width before wrapping with line continuations (0 to disable)',
+				(value) => Number.parseInt(value, 10),
+				120,
+			)
+			.option('-q, --single-quote', 'prefer single quotes instead of double quotes', false)
+			.option('-s, --use-spaces', 'indent with spaces instead of tabs', false)
+			.option('-T, --no-trim', 'do not trim empty lines')
 
-		// break out of the option group
-		.optionsGroup('');
+			// break out of the option group
+			.optionsGroup('')
+	);
 }
 
 export function warnFormattingOptions(options: FormattingOptions): void {
