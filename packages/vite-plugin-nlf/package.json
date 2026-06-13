@@ -11,8 +11,8 @@
 	"homepage": "https://github.com/idleberg/dent/tree/main/packages/vite-plugin-nlf#readme",
 	"type": "module",
 	"exports": {
-		"import": "./dist/plugin.js",
-		"types": "./dist/plugin.d.ts"
+		"import": "./dist/plugin.mjs",
+		"types": "./dist/plugin.d.mts"
 	},
 	"types": "./dist/plugin.d.ts",
 	"engines": {
@@ -26,7 +26,10 @@
 	"scripts": {
 		"build": "tsdown",
 		"dev": "tsdown --watch",
-		"lint": "biome check",
+		"lint": "concurrently --prefix-colors blue,green,magenta npm:lint:*",
+		"lint:biome": "biome check",
+		"lint:biome:ci": "biome ci",
+		"lint:e18e": "e18e-cli analyze --log-level error",
 		"prepack": "npm run build",
 		"publish:npm": "np --any-branch",
 		"test": "cd tests && vite build --config vite.config.ts"
@@ -41,8 +44,8 @@
 		"@nsis/nlf": "workspace:*"
 	},
 	"devDependencies": {
-		"tsdown": "^0.12.9",
-		"vite": "^7.0.0"
+		"tsdown": "^0.22.2",
+		"vite": "^8.0.16"
 	},
 	"peerDependencies": {
 		"vite": "^5.0.0 || ^6.0.0 || >=7.0.0"

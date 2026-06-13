@@ -1,4 +1,4 @@
-import * as NLF from '@nsis/nlf';
+import { parse } from '@nsis/nlf';
 
 export default function NsisLanguageFilePlugin() {
 	return {
@@ -8,13 +8,10 @@ export default function NsisLanguageFilePlugin() {
 				return;
 			}
 
-			const output = NLF.parse(src, {
-				minify: true,
-				stringify: true,
-			});
+			const output = parse(src);
 
 			return {
-				code: [`const data = ${output};`, 'export default data;'].join(''),
+				code: `const data = ${JSON.stringify(output)};export default data;`,
 			};
 		},
 	};
