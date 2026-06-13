@@ -4,7 +4,7 @@
 
 ![License](https://img.shields.io/npm/l/%40nsis%2Fnlf-cli?style=for-the-badge)
 [![Version](https://img.shields.io/npm/v/@nsis/nlf-cli?style=for-the-badge)](https://www.npmjs.org/package/@nsis/nlf-cli)
-![GitHub branch check runs](https://img.shields.io/github/check-runs/idleberg/node-nlf-cli/main?style=for-the-badge)
+[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/nsis-javascript-tools/default.yml?style=for-the-badge)](https://github.com/idleberg/nsis-javascript-tools/actions)
 
 ## Installation
 

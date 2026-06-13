@@ -4,7 +4,7 @@
 
 ![License](https://img.shields.io/npm/l/%40nsis%2Fvite-plugin-nlf?style=for-the-badge)
 [![Version](https://img.shields.io/npm/v/@nsis/vite-plugin-nlf?style=for-the-badge)](https://www.npmjs.org/package/@nsis/vite-plugin-nlf)
-[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/vite-plugin-nlf/tests.yml?style=for-the-badge)](https://github.com/idleberg/vite-plugin-nlf/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/nsis-javascript-tools/default.yml?style=for-the-badge)](https://github.com/idleberg/nsis-javascript-tools/actions)
 
 ## Installation
 
