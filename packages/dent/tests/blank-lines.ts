@@ -62,6 +62,7 @@ test('ensureBlankAroundBlocks: inserts blank before comment leading into opener'
 });
 
 test('ensureBlankAroundBlocks: case keyword treated as opener', () => {
+	// biome-ignore lint/suspicious/noTemplateCurlyInString: NSIS definition
 	const nodes: CSTNode[] = [instr('Name'), instr('${Case}')];
 	const result = ensureBlankAroundBlocks(nodes);
 	assert.is(result.length, 3);

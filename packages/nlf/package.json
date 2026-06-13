@@ -22,7 +22,7 @@
 	],
 	"type": "module",
 	"exports": "./dist/index.mjs",
-	"typings": "./dist/index.d.ts",
+	"typings": "./dist/index.d.mts",
 	"engines": {
 		"node": ">=20.0.0"
 	},

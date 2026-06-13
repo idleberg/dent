@@ -16,4 +16,8 @@ publicHoistPattern:
 minimumReleaseAgeExclude:
   - "idleberg/configs"
   - "@nsis/dent"
-  - '@idleberg/configs@0.4.4'
+  - "@idleberg/configs@0.4.4"
+
+catalog:
+  vite: ^8.0.16
+  vitest: ^4.1.8

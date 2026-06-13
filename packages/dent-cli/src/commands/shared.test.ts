@@ -193,7 +193,7 @@ describe('processFiles', () => {
 		const visited: string[] = [];
 		await processFiles(
 			[a, b],
-			(input) => null,
+			(_input) => null,
 			1,
 			(file) => {
 				visited.push(file);
