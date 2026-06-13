@@ -1,4 +1,4 @@
-# nlf
+# @nsis/nlf
 
 ![License](https://img.shields.io/npm/l/%40nsis%2Fnöf?style=for-the-badge)
 [![Version](https://img.shields.io/npm/v/@nsis/nlf?style=for-the-badge)](https://www.npmjs.org/package/@nsis/nlf)
