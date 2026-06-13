@@ -6,8 +6,9 @@
 	"author": "Jan T. Sott",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/idleberg/vite-plugin-nlf"
+		"url": "git+https://github.com/idleberg/dent.git"
 	},
+	"homepage": "https://github.com/idleberg/dent/tree/main/packages/vite-plugin-nlf#readme",
 	"type": "module",
 	"exports": {
 		"import": "./dist/plugin.js",
@@ -37,7 +38,7 @@
 		"nlf"
 	],
 	"dependencies": {
-		"@nsis/nlf": "workspacve:"
+		"@nsis/nlf": "workspace:*"
 	},
 	"devDependencies": {
 		"tsdown": "^0.12.9",
