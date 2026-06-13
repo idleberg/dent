@@ -28,8 +28,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/idleberg/node-nlf.git"
+		"url": "git+https://github.com/idleberg/dent.git"
 	},
+	"homepage": "https://github.com/idleberg/dent/tree/main/packages/nlf#readme",
 	"keywords": [
 		"nsis",
 		"nsis language file",
