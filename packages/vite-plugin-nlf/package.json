@@ -6,9 +6,9 @@
 	"author": "Jan T. Sott",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/idleberg/dent.git"
+		"url": "git+https://github.com/idleberg/nsis-javascript-tools.git"
 	},
-	"homepage": "https://github.com/idleberg/dent/tree/main/packages/vite-plugin-nlf#readme",
+	"homepage": "https://github.com/idleberg/nsis-javascript-tools/tree/main/packages/vite-plugin-nlf#readme",
 	"type": "module",
 	"exports": {
 		"import": "./dist/plugin.mjs",

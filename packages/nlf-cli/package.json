@@ -30,9 +30,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/idleberg/dent.git"
+		"url": "git+https://github.com/idleberg/nsis-javascript-tools.git"
 	},
-	"homepage": "https://github.com/idleberg/dent/tree/main/packages/nlf-cli#readme",
+	"homepage": "https://github.com/idleberg/nsis-javascript-tools/tree/main/packages/nlf-cli#readme",
 	"keywords": [
 		"nsis",
 		"nsis language file",

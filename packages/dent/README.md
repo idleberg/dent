@@ -4,10 +4,10 @@
 
 ![License](https://img.shields.io/npm/l/%40nsis%2Fdent?style=for-the-badge)
 [![Version](https://img.shields.io/npm/v/@nsis/dent?style=for-the-badge)](https://www.npmjs.org/package/@nsis/dent)
-[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/dent/default.yml?style=for-the-badge)](https://github.com/idleberg/dent/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/nsis-javascript-tools/default.yml?style=for-the-badge)](https://github.com/idleberg/nsis-javascript-tools/actions)
 
 > [!NOTE]  
-> This is the repository for the formatting library powering the [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=idleberg.nsis) and [Pulsar](https://packages.pulsar-edit.dev/packages/language-nsis) packages. Chances are you were looking for the [CLI tool](https://github.com/idleberg/dent/tree/main/packages/dent-cli).
+> This is the repository for the formatting library powering the [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=idleberg.nsis) and [Pulsar](https://packages.pulsar-edit.dev/packages/language-nsis) packages. Chances are you were looking for the [CLI tool](https://github.com/idleberg/nsis-javascript-tools/tree/main/packages/dent-cli).
 
 ## Installation
 

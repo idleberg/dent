@@ -30,9 +30,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/idleberg/dent.git"
+		"url": "git+https://github.com/idleberg/nsis-javascript-tools.git"
 	},
-	"homepage": "https://github.com/idleberg/dent/tree/main/packages/dent#readme",
+	"homepage": "https://github.com/idleberg/nsis-javascript-tools/tree/main/packages/dent#readme",
 	"keywords": [
 		"nsis",
 		"formatter"

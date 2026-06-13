@@ -4,7 +4,7 @@
 
 ![License](https://img.shields.io/npm/l/%40nsis%2Fparser?style=for-the-badge)
 [![Version](https://img.shields.io/npm/v/@nsis/parser?style=for-the-badge)](https://www.npmjs.org/package/@nsis/parser)
-[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/dent/default.yml?style=for-the-badge)](https://github.com/idleberg/dent/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/idleberg/nsis-javascript-tools/default.yml?style=for-the-badge)](https://github.com/idleberg/nsis-javascript-tools/actions)
 
 ## Installation
 
@@ -27,13 +27,13 @@ Returns a flat array of CST nodes, one per logical line:
 
 ```ts
 [
-  { type: "blank" },
-  { type: "instruction", keyword: "Name", args: ['"Demo"'] },
-  { type: "instruction", keyword: "Section", args: [] },
-  { type: "instruction", keyword: "Nop", args: [] },
-  { type: "instruction", keyword: "SectionEnd", args: [] },
-  { type: "blank" },
-]
+	{ type: "blank" },
+	{ type: "instruction", keyword: "Name", args: ['"Demo"'] },
+	{ type: "instruction", keyword: "Section", args: [] },
+	{ type: "instruction", keyword: "Nop", args: [] },
+	{ type: "instruction", keyword: "SectionEnd", args: [] },
+	{ type: "blank" },
+];
 ```
 
 ### API
@@ -49,7 +49,9 @@ Throws `SyntaxError` if the input cannot be parsed.
 #### `BlankNode`
 
 ```ts
-{ type: "blank" }
+{
+	type: "blank";
+}
 ```
 
 #### `CommentNode`
