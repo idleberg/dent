@@ -1,0 +1,23 @@
+# Package Manager
+bower_components/
+node_modules/
+npm-debug.log*
+vendor/
+package-lock.json
+yarn-error.log
+yarn.lock
+bin/
+
+# Development
+.eslintcache
+
+# Build
+dist/
+
+# Project specific
+*.exe
+*.map
+*.nsi
+test.js
+test.ts
+todo.md
