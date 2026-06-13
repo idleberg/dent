@@ -37,29 +37,13 @@
 		"nlf"
 	],
 	"dependencies": {
-		"@nsis/nlf": "^0.12.0"
+		"@nsis/nlf": "workspacve:"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.0.5",
-		"@commitlint/cli": "^19.8.1",
-		"@commitlint/config-conventional": "^19.8.1",
-		"@idleberg/configs": "^0.2.0",
-		"@total-typescript/tsconfig": "^1.0.4",
-		"@types/node": "^22.15.3",
-		"concurrently": "^9.2.0",
-		"lefthook": "^1.11.14",
-		"np": "^10.2.0",
 		"tsdown": "^0.12.9",
-		"typescript": "^5.2.2",
 		"vite": "^7.0.0"
 	},
 	"peerDependencies": {
 		"vite": "^5.0.0 || ^6.0.0 || >=7.0.0"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"lefthook"
-		]
-	},
-	"packageManager": "pnpm@10.16.1+sha512.0e155aa2629db8672b49e8475da6226aa4bdea85fdcdfdc15350874946d4f3c91faaf64cbdc4a5d1ab8002f473d5c3fcedcd197989cf0390f9badd3c04678706"
+	}
 }
